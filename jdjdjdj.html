@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Dream Card Studio</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#fff0f5;
+ color:#794b61;
+ font-family:Arial,sans-serif;
+}
+header{
+ text-align:center;
+ padding:25px 10px;
+ background:linear-gradient(120deg,#ffd4e4,#eadcff);
+}
+header h1{margin:0;font-family:Georgia;color:#a94f78}
+header p{font-size:13px}
+.main{
+ max-width:1100px;
+ margin:25px auto;
+ padding:12px;
+ display:grid;
+ grid-template-columns:340px 1fr;
+ gap:22px;
+}
+.panel{
+ background:white;
+ border-radius:18px;
+ padding:20px;
+ box-shadow:0 5px 20px #d49bb733;
+}
+.panel h3{margin-top:0;color:#b65b83}
+label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin:13px 0 6px;
+}
+input,textarea,select{
+ width:100%;
+ padding:10px;
+ border:1px solid #f0c6d8;
+ border-radius:9px;
+ background:#fffafd;
+ color:#794b61;
+ font-family:Arial;
+}
+textarea{height:100px;resize:vertical}
+input[type=color]{height:40px;padding:3px}
+input[type=range]{padding:0}
+button{
+ border:0;
+ padding:11px 13px;
+ border-radius:10px;
+ background:#dc83aa;
+ color:white;
+ cursor:pointer;
+ font-weight:bold;
+ margin-top:9px;
+}
+button:hover{filter:brightness(.94)}
+.buttons{display:flex;gap:8px;flex-wrap:wrap}
+.buttons button{flex:1}
+.preview{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ min-width:0;
+}
+.card{
+ width:100%;
+ max-width:550px;
+ min-height:580px;
+ padding:35px 25px;
+ position:relative;
+ overflow:hidden;
+ text-align:center;
+ background:linear-gradient(140deg,#fff1f5,#ffe0eb);
+ border:8px double #e4a2bb;
+ border-radius:12px;
+ box-shadow:0 12px 35px #bd7f9b55;
+ color:#8c4969;
+}
+.card-inner{position:relative;z-index:2}
+.card .top{font-size:38px;margin:10px}
+.card h2{
+ font-family:Georgia;
+ font-size:32px;
+ margin:25px 0;
+ color:#ba6388;
+ overflow-wrap:anywhere;
+}
+.card .message{
+ font-family:Georgia;
+ font-size:19px;
+ line-height:1.9;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+}
+.card .from{
+ margin-top:35px;
+ font-family:cursive;
+ font-size:21px;
+}
+.card .bottom{font-size:35px;margin-top:35px}
+.stickers{
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+}
+.sticker{
+ position:absolute;
+ font-size:35px;
+}
+.s1{top:8px;left:10px}
+.s2{top:8px;right:10px}
+.s3{bottom:10px;left:10px}
+.s4{bottom:10px;right:10px}
+#extra{
+ display:flex;
+ flex-wrap:wrap;
+ gap:6px;
+ margin-top:10px;
+}
+#extra span{
+ font-size:28px;
+ cursor:pointer;
+}
+.note{font-size:12px;color:#a67a91;line-height:1.5}
+@media(max-width:760px){
+ .main{grid-template-columns:1fr}
+ .card{min-height:500px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>♡ MY DREAM CARD STUDIO ♡</h1>
+<p>Make something beautiful with love 🌷</p>
+</header>
+
+<div class="main">
+
+<!-- BẢNG CHỈNH SỬA -->
+<section class="panel">
+<h3>🎀 Nội dung thiệp</h3>
+
+<label>Tiêu đề</label>
+<input id="title" value="Gửi cậu thân yêu ♡">
+
+<label>Lời chúc</label>
+<textarea id="message">Chúc cậu luôn vui vẻ và hạnh phúc!
+
+Mong rằng mỗi ngày của cậu đều ngập tràn những điều tuyệt vời.
+Hãy luôn tỏa sáng theo cách riêng của mình nhé! 🌷
+
+Thương thật nhiều ♡</textarea>
+
+<label>Người gửi</label>
+<input id="sender" value="Someone who loves you">
+
+<hr style="border:0;border-top:1px solid #f5dce7;margin:20px 0">
+
+<h3>🎨 Trang trí</h3>
+
+<label>Màu nền</label>
+<input type="color" id="bg" value="#fff1f5">
+
+<label>Màu chữ</label>
+<input type="color" id="txt" value="#8c4969">
+
+<label>Màu viền</label>
+<input type="color" id="borderColor" value="#e4a2bb">
+
+<label>Kiểu nền</label>
+<select id="background">
+<option value="linear-gradient(140deg,#fff1f5,#ffe0eb)">Pink Dream 🌸</option>
+<option value="linear-gradient(140deg,#e8f6ff,#d6e8ff)">Baby Blue 🦋</option>
+<option value="linear-gradient(140deg,#fff5d9,#ffe6a6)">Vanilla 🍮</option>
+<option value="linear-gradient(140deg,#e6ffe9,#c9f2d3)">Mint Garden 🍃</option>
+<option value="linear-gradient(140deg,#f0e4ff,#dfcaff)">Lavender 💜</option>
+<option value="solid">Màu đơn</option>
+</select>
+
+<label>Kiểu viền</label>
+<select id="borderStyle">
+<option value="double">Viền đôi</option>
+<option value="solid">Viền liền</option>
+<option value="dashed">Viền đứt</option>
+<option value="dotted">Viền chấm</option>
+<option value="groove">Viền nổi</option>
+</select>
+
+<label>Font chữ</label>
+<select id="font">
+<option value="Georgia">Georgia - Thanh lịch</option>
+<option value="cursive">Cursive - Viết tay</option>
+<option value="Arial">Arial - Hiện đại</option>
+<option value="serif">Serif - Cổ điển</option>
+</select>
+
+<label>Kích thước chữ</label>
+<input type="range" id="fontSize" min="14" max="27" value="19">
+
+<label>Độ bo góc</label>
+<input type="range" id="radius" min="0" max="40" value="12">
+
+<hr style="border:0;border-top:1px solid #f5dce7;margin:20px 0">
+
+<h3>🌷 Sticker trang trí</h3>
+<div id="extra">
+<span onclick="addSticker('🌸')">🌸</span>
+<span onclick="addSticker('🌷')">🌷</span>
+<span onclick="addSticker('🦋')">🦋</span>
+<span onclick="addSticker('💗')">💗</span>
+<span onclick="addSticker('✨')">✨</span>
+<span onclick="addSticker('🌹')">🌹</span>
+<span onclick="addSticker('🎀')">🎀</span>
+<span onclick="addSticker('🐰')">🐰</span>
+<span onclick="addSticker('⭐')">⭐</span>
+<span onclick="addSticker('🍓')">🍓</span>
+<span onclick="addSticker('💐')">💐</span>
+<span onclick="addSticker('☁️')">☁️</span>
+</div>
+
+<p class="note">Nhấn vào sticker để thêm vào thiệp. Bạn có thể xóa sticker bằng cách nhấn vào nút xóa.</p>
+
+<div class="buttons">
+<button onclick="clearStickers()">🧹 Xóa sticker</button>
+<button onclick="resetAll()">↩ Đặt lại</button>
+</div>
+
+<button onclick="saveCard()" style="width:100%;background:#ad5982;margin-top:20px">
+📥 TẢI THIỆP PNG
+</button>
+<p class="note">Ảnh được xuất với độ phân giải cao, giữ nguyên nội dung và màu sắc thiết kế.</p>
+
+</section>
+
+<!-- BẢN XEM TRƯỚC -->
+<section class="preview">
+<div class="card" id="card">
+
+<div class="stickers" id="stickers">
+<span class="sticker s1">🌸</span>
+<span class="sticker s2">🦋</span>
+<span class="sticker s3">🌷</span>
+<span class="sticker s4">💗</span>
+</div>
+
+<div class="card-inner">
+<div class="top">୨୧</div>
+<div style="font-size:15px;letter-spacing:4px">A LITTLE GIFT FOR YOU</div>
+
+<h2 id="showTitle">Gửi cậu thân yêu ♡</h2>
+
+<div style="font-size:25px;margin:20px">✿ ❀ ✿</div>
+
+<div class="message" id="showMessage"></div>
+
+<div style="font-size:25px;margin-top:25px">♡ ❀ ♡</div>
+
+<div class="from" id="showSender"></div>
+
+<div class="bottom">🌷 ♡ 🌷</div>
+</div>
+</div>
+</section>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let stickers = [];
+let stickerCount = 0;
+
+function updateCard(){
+ const card = $("card");
+
+ $("showTitle").textContent = $("title").value;
+ $("showMessage").textContent = $("message").value;
+ $("showSender").textContent = "— " + $("sender").value + " —";
+
+ card.style.color = $("txt").value;
+ card.style.borderColor = $("borderColor").value;
+ card.style.borderStyle = $("borderStyle").value;
+ card.style.borderRadius = $("radius").value + "px";
+
+ if($("background").value === "solid"){
+   card.style.background = $("bg").value;
+ }else{
+   card.style.background = $("background").value;
+ }
+
+ $("showMessage").style.fontFamily = $("font").value;
+ $("showMessage").style.fontSize = $("fontSize").value + "px";
+}
+
+document.querySelectorAll("input,textarea,select")
+.forEach(el=>{
+ el.addEventListener("input",updateCard);
+ el.addEventListener("change",updateCard);
+});
+
+function addSticker(emoji){
+ if(stickerCount >= 20){
+   alert("Bạn đã thêm tối đa 20 sticker!");
+   return;
+ }
+
+ stickerCount++;
+
+ const item = document.createElement("span");
+ item.textContent = emoji;
+ item.className = "sticker";
+ item.style.left = (10 + Math.random()*75) + "%";
+ item.style.top = (10 + Math.random()*75) + "%";
+ item.style.fontSize = (22 + Math.random()*20) + "px";
+ item.style.pointerEvents = "auto";
+ item.style.cursor = "pointer";
+ item.title = "Nhấn để xóa sticker";
+
+ item.onclick = () => {
+   item.remove();
+   stickerCount--;
+ };
+
+ $("stickers").appendChild(item);
+}
+
+function clearStickers(){
+ $("stickers").innerHTML = `
+ <span class="sticker s1">🌸</span>
+ <span class="sticker s2">🦋</span>
+ <span class="sticker s3">🌷</span>
+ <span class="sticker s4">💗</span>`;
+ stickerCount = 0;
+}
+
+function resetAll(){
+ $("title").value = "Gửi cậu thân yêu ♡";
+ $("message").value = "Chúc cậu luôn vui vẻ và hạnh phúc!";
+ $("sender").value = "Someone who loves you";
+ $("bg").value = "#fff1f5";
+ $("txt").value = "#8c4969";
+ $("borderColor").value = "#e4a2bb";
+ $("background").value = "linear-gradient(140deg,#fff1f5,#ffe0eb)";
+ $("borderStyle").value = "double";
+ $("font").value = "Georgia";
+ $("fontSize").value = 19;
+ $("radius").value = 12;
+ clearStickers();
+ updateCard();
+}
+
+async function saveCard(){
+ const btn = document.querySelector(
+ 'button[onclick="saveCard()"]'
+ );
+
+ try{
+   btn.disabled = true;
+   btn.textContent = "Đang tạo ảnh...";
+
+   await document.fonts.ready;
+
+   const canvas = await html2canvas($("card"),{
+     scale: 3,
+     useCORS: true,
+     backgroundColor: null,
+     logging: false,
+     width: $("card").offsetWidth,
+     height: $("card").offsetHeight,
+     windowWidth: 1200
+   });
+
+   const link = document.createElement("a");
+   link.download = "my-dream-card.png";
+   link.href = canvas.toDataURL("image/png");
+   link.click();
+
+ }catch(error){
+   console.error(error);
+   alert("Lưu ảnh thất bại. Hãy kiểm tra kết nối Internet nhé!");
+ }finally{
+   btn.disabled = false;
+   btn.textContent = "📥 TẢI THIỆP PNG";
+ }
+}
+
+updateCard();
+</script>
+
+</body>
+</html>
